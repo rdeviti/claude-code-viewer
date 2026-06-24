@@ -84,6 +84,10 @@ export const getConversationKey = (conversation: Conversation) => {
     return `worktree-state_${conversation.sessionId}_${conversation.worktreeSession.worktreeName}`;
   }
 
+  if (conversation.type === "bridge-session") {
+    return `bridge-session_${conversation.sessionId}_${conversation.bridgeSessionId}`;
+  }
+
   if (conversation.type === "attachment") {
     return `attachment_${conversation.uuid}`;
   }

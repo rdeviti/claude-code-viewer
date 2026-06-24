@@ -403,6 +403,7 @@ export const ConversationList: FC<ConversationListProps> = ({
       if (conv.type === "permission-mode") return false;
       if (conv.type === "mode") return false;
       if (conv.type === "worktree-state") return false;
+      if (conv.type === "bridge-session") return false;
 
       const isSidechain =
         conv.type !== "summary" &&
@@ -646,6 +647,7 @@ export const ConversationList: FC<ConversationListProps> = ({
       conversation.type !== "permission-mode" &&
       conversation.type !== "mode" &&
       conversation.type !== "worktree-state" &&
+      conversation.type !== "bridge-session" &&
       conversation.isSidechain;
 
     return (
