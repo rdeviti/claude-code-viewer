@@ -80,6 +80,10 @@ export const getConversationKey = (conversation: Conversation) => {
     return `mode_${conversation.sessionId}_${conversation.mode}`;
   }
 
+  if (conversation.type === "worktree-state") {
+    return `worktree-state_${conversation.sessionId}_${conversation.worktreeSession.worktreeName}`;
+  }
+
   if (conversation.type === "attachment") {
     return `attachment_${conversation.uuid}`;
   }

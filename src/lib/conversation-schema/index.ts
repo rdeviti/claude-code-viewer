@@ -15,6 +15,7 @@ import { QueueOperationEntrySchema } from "./entry/QueueOperationEntrySchema.ts"
 import { SummaryEntrySchema } from "./entry/SummaryEntrySchema.ts";
 import { type SystemEntry, SystemEntrySchema } from "./entry/SystemEntrySchema.ts";
 import { type UserEntry, UserEntrySchema } from "./entry/UserEntrySchema.ts";
+import { WorktreeStateEntrySchema } from "./entry/WorktreeStateEntrySchema.ts";
 
 export const ConversationSchema = z.union([
   UserEntrySchema,
@@ -33,6 +34,7 @@ export const ConversationSchema = z.union([
   PrLinkEntrySchema,
   LastPromptEntrySchema,
   AttachmentEntrySchema,
+  WorktreeStateEntrySchema,
 ]);
 
 export type Conversation = z.infer<typeof ConversationSchema>;

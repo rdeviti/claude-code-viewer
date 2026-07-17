@@ -23,6 +23,7 @@ export const useSidechain = (conversations: Conversation[]) => {
             conv.type !== "last-prompt" &&
             conv.type !== "permission-mode" &&
             conv.type !== "mode" &&
+            conv.type !== "worktree-state" &&
             conv.type !== "attachment",
         )
         .filter((conv) => conv.isSidechain === true),
@@ -119,6 +120,7 @@ export const useSidechain = (conversations: Conversation[]) => {
         conversation.type === "last-prompt" ||
         conversation.type === "permission-mode" ||
         conversation.type === "mode" ||
+        conversation.type === "worktree-state" ||
         conversation.type === "attachment"
       ) {
         return false;

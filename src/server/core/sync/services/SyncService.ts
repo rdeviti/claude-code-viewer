@@ -72,7 +72,8 @@ const extractCwdFromContent = (content: string): string | null => {
       conversation.type === "pr-link" ||
       conversation.type === "last-prompt" ||
       conversation.type === "permission-mode" ||
-      conversation.type === "mode"
+      conversation.type === "mode" ||
+      conversation.type === "worktree-state"
     ) {
       continue;
     }
