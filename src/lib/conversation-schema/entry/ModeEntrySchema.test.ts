@@ -36,4 +36,14 @@ describe("ModeEntrySchema", () => {
     });
     expect(result.success).toBe(false);
   });
+
+  test("rejects entries with unknown extra fields", () => {
+    const result = ModeEntrySchema.safeParse({
+      type: "mode",
+      mode: "normal",
+      sessionId: "abc123",
+      unexpected: "field",
+    });
+    expect(result.success).toBe(false);
+  });
 });
