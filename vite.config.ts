@@ -26,6 +26,7 @@ export default defineConfig({
       srcDir: "src",
       filename: "sw.ts",
       registerType: "autoUpdate",
+      injectRegister: null, // local fork: never register the service worker (no offline cache)
       includeAssets: ["favicon.ico", "apple-touch-icon.png", "icon-*.png"],
       manifest: {
         name: "Claude Code Viewer",
