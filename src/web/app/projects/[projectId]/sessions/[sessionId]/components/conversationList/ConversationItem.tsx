@@ -1,4 +1,4 @@
-import { useLingui } from "@lingui/react";
+import { Trans, useLingui } from "@lingui/react";
 import { type FC, memo } from "react";
 import { parseUserMessage } from "@/lib/claude-code/parseUserMessage";
 import type { Conversation, SidechainConversation } from "@/lib/conversation-schema";
@@ -205,9 +205,15 @@ const ConversationItemComponent: FC<ConversationItemProps> = ({
         </div>
       ) : null;
 
-    return conversation.isMeta === true ? (
+    return conversation.isMeta === true || conversation.isCompactSummary === true ? (
       // 展開可能にしてデフォで非展開
-      <MetaConversationContent>
+      <MetaConversationContent
+        title={
+          conversation.isCompactSummary === true ? (
+            <Trans id="conversation.compact_summary" />
+          ) : undefined
+        }
+      >
         <div className="flex flex-col w-full">
           {timestamp}
           {userConversationJsx}

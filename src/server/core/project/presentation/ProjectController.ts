@@ -6,6 +6,7 @@ import { computeClaudeProjectFilePath } from "../../claude-code/functions/comput
 import { ClaudeCodeLifeCycleService } from "../../claude-code/services/ClaudeCodeLifeCycleService.ts";
 import { ApplicationContext } from "../../platform/services/ApplicationContext.ts";
 import { UserConfigService } from "../../platform/services/UserConfigService.ts";
+import { computeSessionChains } from "../../session/functions/computeSessionChains.ts";
 import { SessionRepository } from "../../session/infrastructure/SessionRepository.ts";
 import { encodeProjectId } from "../functions/id.ts";
 import { ProjectRepository } from "../infrastructure/ProjectRepository.ts";
@@ -87,12 +88,21 @@ const LayerImpl = Effect.gen(function* () {
         filteredSessions = Array.from(sessionMap.values());
       }
 
+      // Attach continuation-chain info (computed over ALL project sessions,
+      // so part numbers stay correct regardless of pagination)
+      const { summaries } = yield* sessionRepository.getSessionChainSummaries(projectId);
+      const chains = computeSessionChains(summaries);
+      const sessionsWithChain = filteredSessions.map((session) => ({
+        ...session,
+        chain: chains.get(session.id) ?? null,
+      }));
+
       const hasMore = sessions.length >= 20;
       return {
         status: 200,
         response: {
           project,
-          sessions: filteredSessions,
+          sessions: sessionsWithChain,
           nextCursor: hasMore ? sessions.at(-1)?.id : undefined,
         },
       } as const satisfies ControllerResponse;

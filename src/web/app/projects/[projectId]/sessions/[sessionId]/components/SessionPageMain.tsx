@@ -3,6 +3,8 @@ import { useMutation } from "@tanstack/react-query";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useAtomValue } from "jotai";
 import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
   CopyIcon,
   DownloadIcon,
   EllipsisVertical as EllipsisVerticalIcon,
@@ -363,6 +365,20 @@ const SessionPageMainContent: FC<
     sessionId ?? "",
   );
 
+  // Continuation-chain navigation (sessions sharing a title form one long conversation)
+  const chain = sessionData?.session.chain ?? null;
+  const goToChainPart = useCallback(
+    (partSessionId: string | null) => {
+      if (partSessionId === null) return;
+      void navigate({
+        to: "/projects/$projectId/session",
+        params: { projectId },
+        search: { tab: "sessions", sessionId: partSessionId },
+      });
+    },
+    [navigate, projectId],
+  );
+
   const handleExportJsonl = () => {
     if (sessionData === null || sessionData === undefined || !hasSessionId) return;
 
@@ -449,6 +465,36 @@ const SessionPageMainContent: FC<
               <h1 className="text-sm sm:text-base font-semibold break-all overflow-ellipsis line-clamp-1 min-w-0 text-foreground/90">
                 {headerTitle}
               </h1>
+              {chain !== null && (
+                <div className="flex items-center gap-0.5 flex-shrink-0">
+                  <Badge variant="outline" className="h-5 text-[10px] px-1.5 font-mono">
+                    <Trans
+                      id="chain.part_of"
+                      values={{ n: chain.partNumber, m: chain.partCount }}
+                    />
+                  </Badge>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-6 w-6 p-0"
+                    disabled={chain.previousSessionId === null}
+                    onClick={() => goToChainPart(chain.previousSessionId)}
+                    aria-label="Previous part"
+                  >
+                    <ChevronLeftIcon className="w-3.5 h-3.5" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-6 w-6 p-0"
+                    disabled={chain.nextSessionId === null}
+                    onClick={() => goToChainPart(chain.nextSessionId)}
+                    aria-label="Next part"
+                  >
+                    <ChevronRightIcon className="w-3.5 h-3.5" />
+                  </Button>
+                </div>
+              )}
             </div>
             {isExistingSession && (
               <Popover>
@@ -663,6 +709,18 @@ const SessionPageMainContent: FC<
           data-testid="scrollable-content"
         >
           <main className="w-full px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 relative min-w-0 pb-4">
+            {isExistingSession && chain !== null && chain.previousSessionId !== null && (
+              <div className="flex justify-center pt-3">
+                <button
+                  type="button"
+                  onClick={() => goToChainPart(chain.previousSessionId)}
+                  className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <ChevronLeftIcon className="w-3 h-3" />
+                  <Trans id="chain.continued_from" values={{ n: chain.partNumber - 1 }} />
+                </button>
+              </div>
+            )}
             <ConversationList
               conversations={isExistingSession ? (conversations ?? []) : []}
               getToolResult={getToolResult}
@@ -672,6 +730,24 @@ const SessionPageMainContent: FC<
               scrollContainerRef={scrollContainerRef}
               enableInPageSearch
             />
+            {isExistingSession &&
+              chain !== null &&
+              chain.nextSessionId !== null &&
+              effectiveSessionStatus !== "running" && (
+                <div className="flex justify-center py-6">
+                  <Button
+                    variant="outline"
+                    className="gap-2"
+                    onClick={() => goToChainPart(chain.nextSessionId)}
+                  >
+                    <Trans
+                      id="chain.continue_next"
+                      values={{ n: chain.partNumber + 1, m: chain.partCount }}
+                    />
+                    <ChevronRightIcon className="w-4 h-4" />
+                  </Button>
+                </div>
+              )}
             {!isExistingSession && (
               <div className="space-y-6">
                 <div className="rounded-2xl border border-dashed border-muted-foreground/40 bg-muted/30 p-8 text-center space-y-3">

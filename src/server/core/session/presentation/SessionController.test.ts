@@ -50,6 +50,7 @@ describe("SessionController", () => {
       const sessionRepositoryLayer = Layer.succeed(SessionRepository, {
         getSession: () => Effect.succeed({ session: null }),
         getSessions: () => Effect.succeed({ sessions: [] }),
+        getSessionChainSummaries: () => Effect.succeed({ summaries: [] }),
       });
 
       const agentSessionRepositoryLayer = Layer.succeed(AgentSessionRepository, {

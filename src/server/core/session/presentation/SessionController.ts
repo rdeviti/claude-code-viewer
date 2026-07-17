@@ -5,6 +5,7 @@ import type { InferEffect } from "../../../lib/effect/types.ts";
 import { AgentSessionRepository } from "../../agent-session/infrastructure/AgentSessionRepository.ts";
 import { EventBus } from "../../events/services/EventBus.ts";
 import { SessionRepository } from "../../session/infrastructure/SessionRepository.ts";
+import { computeSessionChains } from "../functions/computeSessionChains.ts";
 import { decodeSessionId } from "../functions/id.ts";
 import { generateSessionHtml } from "../services/ExportService.ts";
 
@@ -20,9 +21,19 @@ const LayerImpl = Effect.gen(function* () {
 
       const { session } = yield* sessionRepository.getSession(projectId, sessionId);
 
+      if (session === null) {
+        return {
+          status: 200,
+          response: { session: null },
+        } as const satisfies ControllerResponse;
+      }
+
+      const { summaries } = yield* sessionRepository.getSessionChainSummaries(projectId);
+      const chains = computeSessionChains(summaries);
+
       return {
         status: 200,
-        response: { session },
+        response: { session: { ...session, chain: chains.get(sessionId) ?? null } },
       } as const satisfies ControllerResponse;
     });
 

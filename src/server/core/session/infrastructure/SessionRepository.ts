@@ -139,9 +139,54 @@ const LayerImpl = Effect.gen(function* () {
       return { sessions: sessionsResult };
     });
 
+  const getSessionChainSummaries = (projectId: string) =>
+    Effect.gen(function* () {
+      const claudeProjectPath = decodeProjectId(projectId);
+
+      // Validate that the project path is within the Claude projects directory
+      const { claudeProjectsDirPath } = yield* appContext.claudeCodePaths;
+      if (!validateProjectPath(claudeProjectPath, claudeProjectsDirPath)) {
+        return yield* Effect.fail(new Error("Invalid project path: outside allowed directory"));
+      }
+
+      const rows = db
+        .select({
+          id: sessions.id,
+          customTitle: sessions.customTitle,
+          lastModifiedAt: sessions.lastModifiedAt,
+          messageCount: sessions.messageCount,
+          filePath: sessions.filePath,
+        })
+        .from(sessions)
+        .where(eq(sessions.projectId, projectId))
+        .all();
+
+      const summaries = yield* Effect.all(
+        rows.map((row) =>
+          Effect.gen(function* () {
+            const sizeBytes = yield* fs.stat(row.filePath).pipe(
+              Effect.map((stat) => Number(stat.size)),
+              Effect.orElseSucceed(() => 0),
+            );
+            return {
+              id: row.id,
+              title: row.customTitle,
+              lastModifiedAt: row.lastModifiedAt,
+              messageCount: row.messageCount,
+              sizeBytes,
+            };
+          }),
+        ),
+        { concurrency: "unbounded" },
+      );
+
+      return { summaries };
+    });
+
   return {
     getSession,
     getSessions,
+    getSessionChainSummaries,
   };
 });
 

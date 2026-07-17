@@ -58,6 +58,7 @@ export const useSessionQuery = (projectId: string, sessionId: string) => {
               },
               conversations: [virtualEntry],
               lastModifiedAt: virtualMessage.sentAt,
+              chain: null,
             },
           };
         }
