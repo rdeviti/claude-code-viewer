@@ -1,13 +1,13 @@
 # Claude Code Viewer
 
 > [!NOTE]
-> **This is an actively maintained fork** of [d-kimuson/claude-code-viewer](https://github.com/d-kimuson/claude-code-viewer), which appears dormant since May 2026. On top of upstream v0.7.5 this fork adds:
+> **Personal fork.** This is my fork of [d-kimuson/claude-code-viewer](https://github.com/d-kimuson/claude-code-viewer) (upstream appears dormant since May 2026), with changes built for my own use and published in case they help others. No maintenance promises — I add the features I need and may stop when I'm happy. Feel free to cherry-pick anything, or open PRs for fixes: I'll try to review them when time permits, though I can't promise timely responses. Original authorship is preserved in the history.
+>
+> On top of upstream v0.7.5 this fork adds:
 >
 > - **Continuation-chain navigation** — sessions sharing a title (the parts Claude Code creates when a long conversation is continued) are grouped in the session list with part numbers, sizes, and live indicators, and the conversation view gets a "Part n / m" chip, prev/next navigation, and a "Continue to part n+1" button
 > - **Support for newer Claude Code session-log formats** — `mode`, `worktree-state`, and bridge-session entries, null usage fields on rate-limited responses, `leafUuid`-only `last-prompt` entries (includes stranded upstream PR [#216](https://github.com/d-kimuson/claude-code-viewer/pull/216) by [@rymalia](https://github.com/rymalia), with original authorship)
 > - **No PWA/service-worker caching** — the UI always serves the live build
->
-> Upstream PRs remain open, and this fork will gladly rebase onto upstream if it revives.
 
 [![License](https://img.shields.io/github/license/d-kimuson/claude-code-viewer)](https://github.com/d-kimuson/claude-code-viewer/blob/main/LICENSE)
 [![CI](https://github.com/d-kimuson/claude-code-viewer/actions/workflows/ci.yml/badge.svg)](https://github.com/d-kimuson/claude-code-viewer/actions/workflows/ci.yml)
