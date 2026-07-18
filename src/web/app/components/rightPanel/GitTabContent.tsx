@@ -20,6 +20,7 @@ import { oneDark, oneLight } from "react-syntax-highlighter/dist/esm/styles/pris
 import { toast } from "sonner";
 import { detectLanguage } from "@/lib/file-viewer";
 import { extractLatestTodos } from "@/lib/todo-viewer";
+import { useConfig } from "@/web/app/hooks/useConfig";
 import { Badge } from "@/web/components/ui/badge";
 import { Button } from "@/web/components/ui/button";
 import { Checkbox } from "@/web/components/ui/checkbox";
@@ -384,6 +385,8 @@ const GitFileListFallback: FC = () => (
 const GitFileListWithCommit: FC<{ projectId: string }> = ({ projectId }) => {
   const { i18n } = useLingui();
   const commitMessageId = useId();
+  const { config } = useConfig();
+  const viewerOnly = config?.viewerOnly === true;
   const { data: diffData } = useGitDiffSuspense(projectId, "HEAD", "working");
   const queryClient = useQueryClient();
 
@@ -543,128 +546,130 @@ const GitFileListWithCommit: FC<{ projectId: string }> = ({ projectId }) => {
 
   return (
     <div className="flex flex-col">
-      {/* Commit section */}
-      <div className="mx-2 mt-2 mb-1 bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700">
-        <button
-          type="button"
-          onClick={() => setIsCommitSectionExpanded(!isCommitSectionExpanded)}
-          className="w-full flex items-center justify-between p-2 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors rounded-t-lg"
-        >
-          <span className="text-xs font-medium text-gray-700 dark:text-gray-300">
-            <Trans id="diff.commit.changes" />
-          </span>
-          {isCommitSectionExpanded ? (
-            <ChevronUp className="h-4 w-4 text-gray-600 dark:text-gray-400" />
-          ) : (
-            <ChevronDown className="h-4 w-4 text-gray-600 dark:text-gray-400" />
+      {/* Commit section (hidden in viewer-only mode: reading history stays, writing goes) */}
+      {!viewerOnly && (
+        <div className="mx-2 mt-2 mb-1 bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700">
+          <button
+            type="button"
+            onClick={() => setIsCommitSectionExpanded(!isCommitSectionExpanded)}
+            className="w-full flex items-center justify-between p-2 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors rounded-t-lg"
+          >
+            <span className="text-xs font-medium text-gray-700 dark:text-gray-300">
+              <Trans id="diff.commit.changes" />
+            </span>
+            {isCommitSectionExpanded ? (
+              <ChevronUp className="h-4 w-4 text-gray-600 dark:text-gray-400" />
+            ) : (
+              <ChevronDown className="h-4 w-4 text-gray-600 dark:text-gray-400" />
+            )}
+          </button>
+
+          {isCommitSectionExpanded && (
+            <div className="p-3 pt-0 space-y-3">
+              {/* File selection controls */}
+              <div className="flex items-center gap-2 flex-wrap">
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={handleSelectAll}
+                  disabled={commitMutation.isPending}
+                  className="h-6 text-[10px]"
+                >
+                  <Trans id="diff.select.all" />
+                </Button>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={handleDeselectAll}
+                  disabled={commitMutation.isPending}
+                  className="h-6 text-[10px]"
+                >
+                  <Trans id="diff.deselect.all" />
+                </Button>
+                <span className="text-[10px] text-gray-600 dark:text-gray-400">
+                  {selectedCount} / {files.length} files
+                </span>
+              </div>
+
+              {/* Commit message input */}
+              <div className="space-y-1">
+                <label
+                  htmlFor={commitMessageId}
+                  className="text-[10px] font-medium text-gray-700 dark:text-gray-300"
+                >
+                  <Trans id="diff.commit.message" />
+                </label>
+                <Textarea
+                  id={commitMessageId}
+                  placeholder="Enter commit message..."
+                  value={commitMessage}
+                  onChange={(e) => setCommitMessage(e.target.value)}
+                  disabled={commitMutation.isPending}
+                  className="resize-none text-xs min-h-[60px]"
+                  rows={2}
+                />
+              </div>
+
+              {/* Action buttons */}
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <Button
+                  onClick={() => {
+                    void handleCommit();
+                  }}
+                  disabled={isCommitDisabled}
+                  size="sm"
+                  className="h-7 text-xs"
+                >
+                  {commitMutation.isPending ? (
+                    <>
+                      <Loader2 className="w-3 h-3 mr-1 animate-spin" />
+                      <Trans id="diff.committing" />
+                    </>
+                  ) : (
+                    <Trans id="diff.commit" />
+                  )}
+                </Button>
+                <Button
+                  onClick={() => {
+                    void handlePush();
+                  }}
+                  disabled={pushMutation.isPending}
+                  variant="outline"
+                  size="sm"
+                  className="h-7 text-xs"
+                >
+                  {pushMutation.isPending ? (
+                    <>
+                      <Loader2 className="w-3 h-3 mr-1 animate-spin" />
+                      <Trans id="diff.pushing" />
+                    </>
+                  ) : (
+                    <Trans id="diff.push" />
+                  )}
+                </Button>
+                <Button
+                  onClick={() => {
+                    void handleCommitAndPush();
+                  }}
+                  disabled={isCommitDisabled || commitAndPushMutation.isPending}
+                  variant="secondary"
+                  size="sm"
+                  className="h-7 text-xs"
+                >
+                  {commitAndPushMutation.isPending ? (
+                    <>
+                      <Loader2 className="w-3 h-3 mr-1 animate-spin" />
+                      <Trans id="diff.committing.pushing" />
+                    </>
+                  ) : (
+                    <Trans id="diff.commit.push" />
+                  )}
+                </Button>
+              </div>
+            </div>
           )}
-        </button>
-
-        {isCommitSectionExpanded && (
-          <div className="p-3 pt-0 space-y-3">
-            {/* File selection controls */}
-            <div className="flex items-center gap-2 flex-wrap">
-              <Button
-                size="sm"
-                variant="ghost"
-                onClick={handleSelectAll}
-                disabled={commitMutation.isPending}
-                className="h-6 text-[10px]"
-              >
-                <Trans id="diff.select.all" />
-              </Button>
-              <Button
-                size="sm"
-                variant="ghost"
-                onClick={handleDeselectAll}
-                disabled={commitMutation.isPending}
-                className="h-6 text-[10px]"
-              >
-                <Trans id="diff.deselect.all" />
-              </Button>
-              <span className="text-[10px] text-gray-600 dark:text-gray-400">
-                {selectedCount} / {files.length} files
-              </span>
-            </div>
-
-            {/* Commit message input */}
-            <div className="space-y-1">
-              <label
-                htmlFor={commitMessageId}
-                className="text-[10px] font-medium text-gray-700 dark:text-gray-300"
-              >
-                <Trans id="diff.commit.message" />
-              </label>
-              <Textarea
-                id={commitMessageId}
-                placeholder="Enter commit message..."
-                value={commitMessage}
-                onChange={(e) => setCommitMessage(e.target.value)}
-                disabled={commitMutation.isPending}
-                className="resize-none text-xs min-h-[60px]"
-                rows={2}
-              />
-            </div>
-
-            {/* Action buttons */}
-            <div className="flex items-center gap-1.5 flex-wrap">
-              <Button
-                onClick={() => {
-                  void handleCommit();
-                }}
-                disabled={isCommitDisabled}
-                size="sm"
-                className="h-7 text-xs"
-              >
-                {commitMutation.isPending ? (
-                  <>
-                    <Loader2 className="w-3 h-3 mr-1 animate-spin" />
-                    <Trans id="diff.committing" />
-                  </>
-                ) : (
-                  <Trans id="diff.commit" />
-                )}
-              </Button>
-              <Button
-                onClick={() => {
-                  void handlePush();
-                }}
-                disabled={pushMutation.isPending}
-                variant="outline"
-                size="sm"
-                className="h-7 text-xs"
-              >
-                {pushMutation.isPending ? (
-                  <>
-                    <Loader2 className="w-3 h-3 mr-1 animate-spin" />
-                    <Trans id="diff.pushing" />
-                  </>
-                ) : (
-                  <Trans id="diff.push" />
-                )}
-              </Button>
-              <Button
-                onClick={() => {
-                  void handleCommitAndPush();
-                }}
-                disabled={isCommitDisabled || commitAndPushMutation.isPending}
-                variant="secondary"
-                size="sm"
-                className="h-7 text-xs"
-              >
-                {commitAndPushMutation.isPending ? (
-                  <>
-                    <Loader2 className="w-3 h-3 mr-1 animate-spin" />
-                    <Trans id="diff.committing.pushing" />
-                  </>
-                ) : (
-                  <Trans id="diff.commit.push" />
-                )}
-              </Button>
-            </div>
-          </div>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* File list with checkboxes */}
       <div className="p-2 space-y-1">
@@ -672,12 +677,14 @@ const GitFileListWithCommit: FC<{ projectId: string }> = ({ projectId }) => {
           const diffInfo = diffsByFile.get(file.filePath);
           return (
             <div key={file.filePath} className="flex items-center gap-1">
-              <Checkbox
-                checked={selectedFiles.get(file.filePath) ?? false}
-                onCheckedChange={() => handleToggleFile(file.filePath)}
-                disabled={commitMutation.isPending}
-                className="h-3 w-3 flex-shrink-0"
-              />
+              {!viewerOnly && (
+                <Checkbox
+                  checked={selectedFiles.get(file.filePath) ?? false}
+                  onCheckedChange={() => handleToggleFile(file.filePath)}
+                  disabled={commitMutation.isPending}
+                  className="h-3 w-3 flex-shrink-0"
+                />
+              )}
               <GitFileDialog
                 projectId={projectId}
                 filePath={file.filePath}

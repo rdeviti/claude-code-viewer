@@ -67,10 +67,13 @@ export const RightPanel: FC<RightPanelProps> = ({
   const { isOpen, activeTab: rawActiveTab, width, browserUrl, inputUrl } = useRightPanelState();
   const { config } = useConfig();
   const viewerOnly = config?.viewerOnly === true;
-  // In viewer-only mode the panel is reduced to the Explorer (archive data);
-  // git/review/browser are live-workflow tools
-  const visibleTabs = viewerOnly ? tabs.filter((tab) => tab.id === "explorer") : tabs;
-  const activeTab = viewerOnly && rawActiveTab !== "explorer" ? "explorer" : rawActiveTab;
+  // In viewer-only mode the panel keeps the archive-reading tabs (Explorer and
+  // a read-only Git history view); review/browser are live-workflow tools
+  const visibleTabs = viewerOnly
+    ? tabs.filter((tab) => tab.id === "explorer" || tab.id === "git")
+    : tabs;
+  const activeTab =
+    viewerOnly && rawActiveTab !== "explorer" && rawActiveTab !== "git" ? "explorer" : rawActiveTab;
   const {
     closePanel,
     setActiveTab,
