@@ -49,45 +49,6 @@ const LayerImpl = Effect.gen(function* () {
         });
       }
 
-      // Unify sessions with same title if unifySameTitleSession is enabled
-      if (userConfig.unifySameTitleSession) {
-        const sessionMap = new Map<string, (typeof filteredSessions)[0]>();
-
-        for (const session of filteredSessions) {
-          // Generate title for comparison
-          const title =
-            session.meta.firstUserMessage !== null
-              ? (() => {
-                  const cmd = session.meta.firstUserMessage;
-                  switch (cmd.kind) {
-                    case "command":
-                      return cmd.commandArgs === undefined
-                        ? cmd.commandName
-                        : `${cmd.commandName} ${cmd.commandArgs}`;
-                    case "local-command":
-                      return cmd.stdout;
-                    case "text":
-                      return cmd.content;
-                    default:
-                      return session.id;
-                  }
-                })()
-              : session.id;
-
-          const existingSession = sessionMap.get(title);
-          if (existingSession !== undefined) {
-            // Keep the session with the latest modification date
-            if (session.lastModifiedAt > existingSession.lastModifiedAt) {
-              sessionMap.set(title, session);
-            }
-          } else {
-            sessionMap.set(title, session);
-          }
-        }
-
-        filteredSessions = Array.from(sessionMap.values());
-      }
-
       // Attach continuation-chain info (computed over ALL project sessions,
       // so part numbers stay correct regardless of pagination)
       const { summaries } = yield* sessionRepository.getSessionChainSummaries(projectId);

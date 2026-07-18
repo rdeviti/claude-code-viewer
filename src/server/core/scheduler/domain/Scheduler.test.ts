@@ -54,7 +54,6 @@ describe("SchedulerService", () => {
     getUserConfig: () =>
       Effect.succeed({
         hideNoUserMessageSession: true,
-        unifySameTitleSession: true,
         enterKeyBehavior: "shift-enter-send",
         permissionMode: "default",
         locale: DEFAULT_LOCALE,

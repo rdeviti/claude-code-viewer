@@ -24,7 +24,6 @@ export type SidebarTab = {
 };
 
 type GlobalSidebarProps = {
-  projectId?: string;
   className?: string;
   additionalTabs?: SidebarTab[];
   defaultActiveTab?: string;
@@ -40,7 +39,6 @@ type GlobalSidebarProps = {
 };
 
 export const GlobalSidebar: FC<GlobalSidebarProps> = ({
-  projectId,
   className,
   additionalTabs = [],
   defaultActiveTab,
@@ -88,7 +86,7 @@ export const GlobalSidebar: FC<GlobalSidebarProps> = ({
               <h3 className="font-medium text-sm text-sidebar-foreground">
                 <Trans id="settings.section.session_display" />
               </h3>
-              <SettingsControls openingProjectId={projectId ?? ""} />
+              <SettingsControls />
             </div>
 
             <div className="space-y-4">

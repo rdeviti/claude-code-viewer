@@ -183,7 +183,7 @@
     "origin": [
       [
         "src/web/components/SettingsControls.tsx",
-        290
+        253
       ]
     ],
     "translation": "选择回车键行为"
@@ -194,7 +194,7 @@
     "origin": [
       [
         "src/web/components/SettingsControls.tsx",
-        348
+        311
       ]
     ],
     "translation": "选择页内搜索快捷键"
@@ -205,7 +205,7 @@
     "origin": [
       [
         "src/web/components/SettingsControls.tsx",
-        434
+        397
       ]
     ],
     "translation": "选择语言"
@@ -216,7 +216,7 @@
     "origin": [
       [
         "src/web/components/SettingsControls.tsx",
-        322
+        285
       ]
     ],
     "translation": "选择搜索快捷键"
@@ -227,7 +227,7 @@
     "origin": [
       [
         "src/web/components/SettingsControls.tsx",
-        463
+        426
       ]
     ],
     "translation": "选择主题"
@@ -3497,7 +3497,7 @@
     "origin": [
       [
         "src/web/components/GlobalSidebar.tsx",
-        73
+        71
       ]
     ],
     "translation": "显示和行为设置"
@@ -3542,7 +3542,7 @@
     "origin": [
       [
         "src/web/components/SettingsControls.tsx",
-        282
+        245
       ]
     ],
     "translation": "回车键行为"
@@ -3553,7 +3553,7 @@
     "origin": [
       [
         "src/web/components/SettingsControls.tsx",
-        300
+        263
       ]
     ],
     "translation": "使用 Command+Enter 发送"
@@ -3564,7 +3564,7 @@
     "origin": [
       [
         "src/web/components/SettingsControls.tsx",
-        306
+        269
       ]
     ],
     "translation": "选择消息输入的回车键行为"
@@ -3575,7 +3575,7 @@
     "origin": [
       [
         "src/web/components/SettingsControls.tsx",
-        297
+        260
       ]
     ],
     "translation": "使用 Enter 发送"
@@ -3586,7 +3586,7 @@
     "origin": [
       [
         "src/web/components/SettingsControls.tsx",
-        294
+        257
       ]
     ],
     "translation": "使用 Shift+Enter 发送(默认)"
@@ -3597,7 +3597,7 @@
     "origin": [
       [
         "src/web/components/SettingsControls.tsx",
-        343
+        306
       ]
     ],
     "translation": "页内搜索快捷键"
@@ -3608,7 +3608,7 @@
     "origin": [
       [
         "src/web/components/SettingsControls.tsx",
-        355
+        318
       ]
     ],
     "translation": "Command+F"
@@ -3619,7 +3619,7 @@
     "origin": [
       [
         "src/web/components/SettingsControls.tsx",
-        352
+        315
       ]
     ],
     "translation": "Ctrl+F"
@@ -3630,7 +3630,7 @@
     "origin": [
       [
         "src/web/components/SettingsControls.tsx",
-        361
+        324
       ]
     ],
     "translation": "选择打开页内搜索的快捷键"
@@ -3641,7 +3641,7 @@
     "origin": [
       [
         "src/web/components/SettingsControls.tsx",
-        314
+        277
       ]
     ],
     "translation": "搜索快捷键"
@@ -3652,7 +3652,7 @@
     "origin": [
       [
         "src/web/components/SettingsControls.tsx",
-        329
+        292
       ]
     ],
     "translation": "Command+K"
@@ -3663,7 +3663,7 @@
     "origin": [
       [
         "src/web/components/SettingsControls.tsx",
-        326
+        289
       ]
     ],
     "translation": "Ctrl+K"
@@ -3674,7 +3674,7 @@
     "origin": [
       [
         "src/web/components/SettingsControls.tsx",
-        335
+        298
       ]
     ],
     "translation": "选择打开搜索对话框的快捷键"
@@ -3689,7 +3689,7 @@
       ],
       [
         "src/web/components/GlobalSidebar.tsx",
-        81
+        79
       ]
     ],
     "translation": "正在加载设置..."
@@ -3700,7 +3700,7 @@
     "origin": [
       [
         "src/web/components/SettingsControls.tsx",
-        429
+        392
       ]
     ],
     "translation": "语言"
@@ -3711,7 +3711,7 @@
     "origin": [
       [
         "src/web/components/SettingsControls.tsx",
-        450
+        413
       ]
     ],
     "translation": "选择您偏好的语言"
@@ -3722,7 +3722,7 @@
     "origin": [
       [
         "src/web/components/SettingsControls.tsx",
-        441
+        404
       ]
     ],
     "translation": "英语"
@@ -3733,7 +3733,7 @@
     "origin": [
       [
         "src/web/components/SettingsControls.tsx",
-        438
+        401
       ]
     ],
     "translation": "日语"
@@ -3744,7 +3744,7 @@
     "origin": [
       [
         "src/web/components/SettingsControls.tsx",
-        444
+        407
       ]
     ],
     "translation": "简体中文"
@@ -3792,7 +3792,7 @@
     "origin": [
       [
         "src/web/components/SettingsControls.tsx",
-        418
+        381
       ]
     ],
     "translation": "配置会话工具栏中可用的模型选项"
@@ -3804,7 +3804,7 @@
     "origin": [
       [
         "src/web/components/SettingsControls.tsx",
-        369
+        332
       ]
     ],
     "translation": "模型选项"
@@ -3816,7 +3816,7 @@
     "origin": [
       [
         "src/web/components/SettingsControls.tsx",
-        399
+        362
       ]
     ],
     "translation": "添加模型选项..."
@@ -3910,7 +3910,7 @@
     "origin": [
       [
         "src/web/components/GlobalSidebar.tsx",
-        96
+        94
       ]
     ],
     "translation": "通知"
@@ -3921,7 +3921,7 @@
     "origin": [
       [
         "src/web/components/GlobalSidebar.tsx",
-        89
+        87
       ]
     ],
     "translation": "会话显示"
@@ -3932,7 +3932,7 @@
     "origin": [
       [
         "src/web/components/GlobalSidebar.tsx",
-        109
+        107
       ]
     ],
     "translation": "系统信息"
@@ -3943,7 +3943,7 @@
     "origin": [
       [
         "src/web/components/SettingsControls.tsx",
-        267
+        230
       ]
     ],
     "translation": "达到速率限制时自动调度继续"
@@ -3954,7 +3954,7 @@
     "origin": [
       [
         "src/web/components/SettingsControls.tsx",
-        273
+        236
       ]
     ],
     "translation": "当 Claude 达到速率限制时,自动调度继续消息"
@@ -3976,7 +3976,7 @@
     "origin": [
       [
         "src/web/components/SettingsControls.tsx",
-        223
+        207
       ]
     ],
     "translation": "隐藏无用户消息的会话"
@@ -3987,32 +3987,10 @@
     "origin": [
       [
         "src/web/components/SettingsControls.tsx",
-        229
+        213
       ]
     ],
     "translation": "仅显示包含用户命令或消息的会话"
-  },
-  "settings.session.unify_same_title": {
-    "placeholders": {},
-    "comments": [],
-    "origin": [
-      [
-        "src/web/components/SettingsControls.tsx",
-        244
-      ]
-    ],
-    "translation": "合并同名会话"
-  },
-  "settings.session.unify_same_title.description": {
-    "placeholders": {},
-    "comments": [],
-    "origin": [
-      [
-        "src/web/components/SettingsControls.tsx",
-        250
-      ]
-    ],
-    "translation": "当多个会话标题相同时,仅显示最新的会话"
   },
   "settings.settingSources.label": {
     "message": "Setting Sources",
@@ -4044,7 +4022,7 @@
     "origin": [
       [
         "src/web/components/GlobalSidebar.tsx",
-        65
+        63
       ]
     ],
     "translation": "显示和通知设置"
@@ -4055,7 +4033,7 @@
     "origin": [
       [
         "src/web/components/SettingsControls.tsx",
-        458
+        421
       ]
     ],
     "translation": "主题"
@@ -4066,7 +4044,7 @@
     "origin": [
       [
         "src/web/components/SettingsControls.tsx",
-        470
+        433
       ]
     ],
     "translation": "深色"
@@ -4077,7 +4055,7 @@
     "origin": [
       [
         "src/web/components/SettingsControls.tsx",
-        479
+        442
       ]
     ],
     "translation": "选择您偏好的颜色主题"
@@ -4088,7 +4066,7 @@
     "origin": [
       [
         "src/web/components/SettingsControls.tsx",
-        467
+        430
       ]
     ],
     "translation": "浅色"
@@ -4099,7 +4077,7 @@
     "origin": [
       [
         "src/web/components/SettingsControls.tsx",
-        473
+        436
       ]
     ],
     "translation": "跟随系统"
@@ -4115,7 +4093,7 @@
       ],
       [
         "src/web/components/GlobalSidebar.tsx",
-        70
+        68
       ]
     ],
     "translation": "设置"
@@ -4127,7 +4105,7 @@
     "origin": [
       [
         "src/web/components/SettingsControls.tsx",
-        178
+        162
       ]
     ],
     "translation": "使用模式"
@@ -4139,7 +4117,7 @@
     "origin": [
       [
         "src/web/components/SettingsControls.tsx",
-        198
+        182
       ]
     ],
     "translation": "API"
@@ -4151,7 +4129,7 @@
     "origin": [
       [
         "src/web/components/SettingsControls.tsx",
-        204
+        188
       ]
     ],
     "translation": "选择您使用Claude Code的方式。订阅模式会限制需要Agent SDK的功能。"
@@ -4163,7 +4141,7 @@
     "origin": [
       [
         "src/web/components/SettingsControls.tsx",
-        184
+        168
       ]
     ],
     "translation": "选择使用模式"
@@ -4175,7 +4153,7 @@
     "origin": [
       [
         "src/web/components/SettingsControls.tsx",
-        192
+        176
       ]
     ],
     "translation": "订阅 (Max, Pro等)"
@@ -4186,7 +4164,7 @@
     "origin": [
       [
         "src/web/app/projects/[projectId]/sessions/[sessionId]/components/sessionSidebar/SessionSidebar.tsx",
-        95
+        94
       ]
     ],
     "translation": "返回项目列表"

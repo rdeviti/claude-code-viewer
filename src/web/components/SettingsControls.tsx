@@ -17,10 +17,9 @@ import {
 } from "@/web/components/ui/select";
 import { useIsSubscriptionMode } from "@/web/hooks/useIsSubscriptionMode";
 import { useTheme } from "@/web/hooks/useTheme";
-import { projectDetailQuery, projectListQuery } from "@/web/lib/api/queries";
+import { projectListQuery } from "@/web/lib/api/queries";
 
 type SettingsControlsProps = {
-  openingProjectId: string;
   showLabels?: boolean;
   showDescriptions?: boolean;
   className?: string;
@@ -35,7 +34,6 @@ const isFindHotkey = (value: string): value is "ctrl-f" | "command-f" => {
 };
 
 export const SettingsControls: FC<SettingsControlsProps> = ({
-  openingProjectId,
   showLabels = true,
   showDescriptions = true,
   className = "",
@@ -75,20 +73,6 @@ export const SettingsControls: FC<SettingsControlsProps> = ({
       onSuccess: async () => {
         await queryClient.refetchQueries({
           queryKey: projectListQuery.queryKey,
-        });
-      },
-    });
-  };
-
-  const handleUnifySameTitleChange = () => {
-    const newConfig = {
-      ...config,
-      unifySameTitleSession: !config?.unifySameTitleSession,
-    };
-    updateConfig(newConfig, {
-      onSuccess: async () => {
-        await queryClient.refetchQueries({
-          queryKey: projectDetailQuery(openingProjectId).queryKey,
         });
       },
     });
@@ -227,27 +211,6 @@ export const SettingsControls: FC<SettingsControlsProps> = ({
       {showDescriptions && (
         <p className="text-xs text-muted-foreground mt-1 ml-6">
           <Trans id="settings.session.hide_no_user_message.description" />
-        </p>
-      )}
-
-      <div className="flex items-center space-x-2">
-        <Checkbox
-          id={`${checkboxId}-unify`}
-          checked={config?.unifySameTitleSession}
-          onCheckedChange={handleUnifySameTitleChange}
-        />
-        {showLabels && (
-          <label
-            htmlFor={`${checkboxId}-unify`}
-            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-          >
-            <Trans id="settings.session.unify_same_title" />
-          </label>
-        )}
-      </div>
-      {showDescriptions && (
-        <p className="text-xs text-muted-foreground mt-1 ml-6">
-          <Trans id="settings.session.unify_same_title.description" />
         </p>
       )}
 

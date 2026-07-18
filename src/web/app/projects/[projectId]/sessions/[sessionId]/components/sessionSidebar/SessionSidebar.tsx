@@ -76,7 +76,6 @@ export const SessionSidebar: FC<{
   return (
     <div className={cn("hidden md:flex h-full w-full", className)}>
       <GlobalSidebar
-        projectId={projectId}
         additionalTabs={additionalTabs}
         defaultActiveTab={initialTab}
         headerButton={

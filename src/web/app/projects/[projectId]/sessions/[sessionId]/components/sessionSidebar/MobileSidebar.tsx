@@ -145,7 +145,7 @@ export const MobileSidebar: FC<MobileSidebarProps> = ({
                   <h3 className="font-medium text-sm text-sidebar-foreground">
                     <Trans id="settings.session.display" />
                   </h3>
-                  <SettingsControls openingProjectId={projectId} />
+                  <SettingsControls />
                 </div>
 
                 <div className="space-y-4">

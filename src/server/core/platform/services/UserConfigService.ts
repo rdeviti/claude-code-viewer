@@ -6,7 +6,6 @@ import type { InferEffect } from "../../../lib/effect/types.ts";
 const LayerImpl = Effect.gen(function* () {
   const configRef = yield* Ref.make<UserConfig>({
     hideNoUserMessageSession: true,
-    unifySameTitleSession: false,
     enterKeyBehavior: "shift-enter-send",
     locale: DEFAULT_LOCALE,
     theme: "system",

@@ -74,7 +74,6 @@ export const testPlatformLayer = (overrides?: {
     getUserConfig: () =>
       Effect.succeed<UserConfig>({
         hideNoUserMessageSession: overrides?.userConfig?.hideNoUserMessageSession ?? true,
-        unifySameTitleSession: overrides?.userConfig?.unifySameTitleSession ?? true,
         enterKeyBehavior: overrides?.userConfig?.enterKeyBehavior ?? "shift-enter-send",
         locale: overrides?.userConfig?.locale ?? DEFAULT_LOCALE,
         theme: overrides?.userConfig?.theme ?? "system",
