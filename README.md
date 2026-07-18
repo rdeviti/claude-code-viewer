@@ -7,6 +7,7 @@
 >
 > - **Continuation-chain navigation** — sessions sharing a title (the parts Claude Code creates when a long conversation is continued) are grouped in the session list with part numbers, sizes, and live indicators, and the conversation view gets a "Part n / m" chip, prev/next navigation, and a "Continue to part n+1" button
 > - **Support for newer Claude Code session-log formats** — `mode`, `worktree-state`, and bridge-session entries, null usage fields on rate-limited responses, `leafUuid`-only `last-prompt` entries (includes stranded upstream PR [#216](https://github.com/d-kimuson/claude-code-viewer/pull/216) by [@rymalia](https://github.com/rymalia), with original authorship)
+> - **LaTeX math rendering in markdown** — via KaTeX, from stranded upstream PR [#214](https://github.com/d-kimuson/claude-code-viewer/pull/214) by [@YonghaoZhao722](https://github.com/YonghaoZhao722), with original authorship
 > - **No PWA/service-worker caching** — the UI always serves the live build
 
 [![License](https://img.shields.io/github/license/d-kimuson/claude-code-viewer)](https://github.com/d-kimuson/claude-code-viewer/blob/main/LICENSE)
