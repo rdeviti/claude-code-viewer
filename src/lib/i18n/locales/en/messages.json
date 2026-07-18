@@ -4371,7 +4371,7 @@
     "origin": [
       [
         "src/web/components/SystemInfoCard.tsx",
-        126
+        127
       ]
     ],
     "translation": "Available Features"
@@ -4382,7 +4382,7 @@
     "origin": [
       [
         "src/web/components/SystemInfoCard.tsx",
-        94
+        95
       ]
     ],
     "translation": "Claude Code"
@@ -4404,7 +4404,7 @@
     "origin": [
       [
         "src/web/components/SystemInfoCard.tsx",
-        99
+        100
       ]
     ],
     "translation": "Executable Path"
@@ -4547,11 +4547,11 @@
     "origin": [
       [
         "src/web/components/SystemInfoCard.tsx",
-        104
+        105
       ],
       [
         "src/web/components/SystemInfoCard.tsx",
-        115
+        116
       ]
     ],
     "translation": "Unknown"
@@ -4566,7 +4566,7 @@
       ],
       [
         "src/web/components/SystemInfoCard.tsx",
-        112
+        113
       ]
     ],
     "translation": "Version"

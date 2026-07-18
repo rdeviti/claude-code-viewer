@@ -84,6 +84,9 @@ export const SystemInfoCard: FC = () => {
             </span>
             <Badge variant="secondary" className="text-xs font-mono">
               v{versionData?.version || "Unknown"}
+              {versionData?.gitSha !== null &&
+                versionData?.gitSha !== undefined &&
+                `-fork (${versionData.gitSha})`}
             </Badge>
           </div>
         </div>

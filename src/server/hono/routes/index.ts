@@ -94,8 +94,12 @@ export const routes = (app: HonoAppType, options: CliOptions) =>
          * Auth un-necessary Routes
          */
         .get("/api/version", (c) => {
+          // biome-ignore lint/style/noProcessEnv: allow only here
+          // oxlint-disable-next-line node/no-process-env -- configuration boundary
+          const gitSha = process.env["CCV_GIT_SHA"];
           return c.json({
             version: packageJson.version,
+            gitSha: gitSha !== undefined && gitSha !== "" ? gitSha : null,
           });
         })
 
