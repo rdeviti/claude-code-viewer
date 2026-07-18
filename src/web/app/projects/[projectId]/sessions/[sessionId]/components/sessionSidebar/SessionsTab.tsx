@@ -252,28 +252,30 @@ export const SessionsTab: FC<{
       </div>
 
       <div className="flex-1 overflow-y-auto p-2 space-y-0.5">
-        <Link
-          to="/projects/$projectId/session"
-          params={{ projectId }}
-          search={{ tab: currentTab }}
-          onClick={onSessionSelect}
-          className={cn(
-            "block rounded-lg p-2.5 transition-all duration-200 border-2 border-dashed border-sidebar-border/60 hover:border-blue-400/80 hover:bg-blue-50/50 dark:hover:bg-blue-950/40 bg-sidebar/10",
-            isNewChatActive &&
-              "bg-blue-100 dark:bg-blue-900/40 border-blue-400 dark:border-blue-500 shadow-sm",
-          )}
-        >
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary">
-              <PlusIcon className="w-4 h-4" />
+        {config?.viewerOnly !== true && (
+          <Link
+            to="/projects/$projectId/session"
+            params={{ projectId }}
+            search={{ tab: currentTab }}
+            onClick={onSessionSelect}
+            className={cn(
+              "block rounded-lg p-2.5 transition-all duration-200 border-2 border-dashed border-sidebar-border/60 hover:border-blue-400/80 hover:bg-blue-50/50 dark:hover:bg-blue-950/40 bg-sidebar/10",
+              isNewChatActive &&
+                "bg-blue-100 dark:bg-blue-900/40 border-blue-400 dark:border-blue-500 shadow-sm",
+            )}
+          >
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary">
+                <PlusIcon className="w-4 h-4" />
+              </div>
+              <div className="space-y-0.5">
+                <p className="text-sm font-semibold text-sidebar-foreground">
+                  <Trans id="chat.modal.title" />
+                </p>
+              </div>
             </div>
-            <div className="space-y-0.5">
-              <p className="text-sm font-semibold text-sidebar-foreground">
-                <Trans id="chat.modal.title" />
-              </p>
-            </div>
-          </div>
-        </Link>
+          </Link>
+        )}
         {listItems.map((item) => {
           if (item.kind === "single") {
             return renderSessionRow(item.session);

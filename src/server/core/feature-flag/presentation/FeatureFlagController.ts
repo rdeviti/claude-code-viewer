@@ -2,14 +2,17 @@ import { Context, Effect, Layer } from "effect";
 import type { ControllerResponse } from "../../../lib/effect/toEffectResponse.ts";
 import type { InferEffect } from "../../../lib/effect/types.ts";
 import { ClaudeCodeService } from "../../claude-code/services/ClaudeCodeService.ts";
+import { CcvOptionsService } from "../../platform/services/CcvOptionsService.ts";
 import type { Flag } from "../models/flag.ts";
 
 const LayerImpl = Effect.gen(function* () {
   const claudeCodeService = yield* ClaudeCodeService;
+  const ccvOptionsService = yield* CcvOptionsService;
 
   const getFlags = () =>
     Effect.gen(function* () {
       const claudeCodeFeatures = yield* claudeCodeService.getAvailableFeatures();
+      const terminalDisabled = yield* ccvOptionsService.getCcvOptions("terminalDisabled");
 
       return {
         response: {
@@ -33,6 +36,10 @@ const LayerImpl = Effect.gen(function* () {
             {
               name: "run-skills-directly",
               enabled: claudeCodeFeatures.runSkillsDirectly,
+            },
+            {
+              name: "terminal",
+              enabled: terminalDisabled !== true,
             },
           ] satisfies Flag[],
         },

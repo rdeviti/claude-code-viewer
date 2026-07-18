@@ -3,8 +3,10 @@ import { useMutation } from "@tanstack/react-query";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useAtomValue } from "jotai";
 import {
+  ChevronDownIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
+  ChevronUpIcon,
   CopyIcon,
   DownloadIcon,
   EllipsisVertical as EllipsisVerticalIcon,
@@ -112,6 +114,7 @@ const SessionPageMainContent: FC<
   const sessionProcesses = useAtomValue(sessionProcessesAtom);
   const virtualMessages = useAtomValue(virtualMessagesAtom);
   const { config } = useConfig();
+  const viewerOnly = config?.viewerOnly === true;
 
   // CC Options state - lifted here to share between ChatActionMenu and ChatInput
   const [savedOptions, setSavedOptions] = useProjectSessionOptions(projectId);
@@ -281,6 +284,19 @@ const SessionPageMainContent: FC<
     previousConversationLength,
     scrollToBottomSettled,
   ]);
+
+  // In viewer-only mode a project lands directly on its most recent session
+  useEffect(() => {
+    if (!viewerOnly || hasSessionId) return;
+    const latest = sortedSessions[0];
+    if (latest === undefined) return;
+    void navigate({
+      to: "/projects/$projectId/session",
+      params: { projectId },
+      search: { tab: "sessions", sessionId: latest.id },
+      replace: true,
+    });
+  }, [viewerOnly, hasSessionId, sortedSessions, navigate, projectId]);
 
   const handleScrollToTop = () => {
     const scrollContainer = scrollContainerRef.current;
@@ -750,19 +766,21 @@ const SessionPageMainContent: FC<
               )}
             {!isExistingSession && (
               <div className="space-y-6">
-                <div className="rounded-2xl border border-dashed border-muted-foreground/40 bg-muted/30 p-8 text-center space-y-3">
-                  <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-background shadow-sm">
-                    <MessageSquareIcon className="w-5 h-5 text-muted-foreground" />
+                {!viewerOnly && (
+                  <div className="rounded-2xl border border-dashed border-muted-foreground/40 bg-muted/30 p-8 text-center space-y-3">
+                    <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-background shadow-sm">
+                      <MessageSquareIcon className="w-5 h-5 text-muted-foreground" />
+                    </div>
+                    <div className="space-y-1">
+                      <p className="text-base font-semibold">
+                        <Trans id="chat.modal.title" />
+                      </p>
+                      <p className="text-sm text-muted-foreground leading-relaxed">
+                        <Trans id="session.empty_state.description" />
+                      </p>
+                    </div>
                   </div>
-                  <div className="space-y-1">
-                    <p className="text-base font-semibold">
-                      <Trans id="chat.modal.title" />
-                    </p>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      <Trans id="session.empty_state.description" />
-                    </p>
-                  </div>
-                </div>
+                )}
 
                 {/* Recent Sessions List */}
                 {sortedSessions.length > 0 && (
@@ -863,43 +881,68 @@ const SessionPageMainContent: FC<
           onQuestionResponse={onQuestionResponse}
         />
 
-        <div className="w-full pt-3">
-          <ChatActionMenu
-            projectId={projectId}
-            onScrollToTop={handleScrollToTop}
-            onScrollToBottom={handleScrollToBottom}
-            sessionProcess={relatedSessionProcess}
-            abortTask={abortTask}
-            isNewChat={!isExistingSession}
-            enableCCOptions={enableCCOptions}
-            ccOptions={ccOptions}
-            onCCOptionsChange={handleCCOptionsChange}
-          />
-        </div>
+        {viewerOnly ? (
+          <div className="flex justify-end gap-1 px-3 py-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-7 w-7 p-0"
+              onClick={handleScrollToTop}
+              aria-label="Scroll to top"
+            >
+              <ChevronUpIcon className="w-4 h-4" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-7 w-7 p-0"
+              onClick={handleScrollToBottom}
+              aria-label="Scroll to bottom"
+            >
+              <ChevronDownIcon className="w-4 h-4" />
+            </Button>
+          </div>
+        ) : (
+          <>
+            <div className="w-full pt-3">
+              <ChatActionMenu
+                projectId={projectId}
+                onScrollToTop={handleScrollToTop}
+                onScrollToBottom={handleScrollToBottom}
+                sessionProcess={relatedSessionProcess}
+                abortTask={abortTask}
+                isNewChat={!isExistingSession}
+                enableCCOptions={enableCCOptions}
+                ccOptions={ccOptions}
+                onCCOptionsChange={handleCCOptionsChange}
+              />
+            </div>
 
-        <div className="flex-shrink-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-          {isExistingSession && relatedSessionProcess ? (
-            <ContinueChat
-              projectId={projectId}
-              sessionId={sessionId}
-              sessionProcessId={relatedSessionProcess.id}
-              sessionProcessStatus={effectiveSessionStatus}
-            />
-          ) : isExistingSession ? (
-            <ResumeChat
-              projectId={projectId}
-              sessionId={sessionId}
-              ccOptions={ccOptions}
-              onCCOptionsChange={handleCCOptionsChange}
-            />
-          ) : (
-            <StartNewChat
-              projectId={projectId}
-              ccOptions={ccOptions}
-              onCCOptionsChange={handleCCOptionsChange}
-            />
-          )}
-        </div>
+            <div className="flex-shrink-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+              {isExistingSession && relatedSessionProcess ? (
+                <ContinueChat
+                  projectId={projectId}
+                  sessionId={sessionId}
+                  sessionProcessId={relatedSessionProcess.id}
+                  sessionProcessStatus={effectiveSessionStatus}
+                />
+              ) : isExistingSession ? (
+                <ResumeChat
+                  projectId={projectId}
+                  sessionId={sessionId}
+                  ccOptions={ccOptions}
+                  onCCOptionsChange={handleCCOptionsChange}
+                />
+              ) : (
+                <StartNewChat
+                  projectId={projectId}
+                  ccOptions={ccOptions}
+                  onCCOptionsChange={handleCCOptionsChange}
+                />
+              )}
+            </div>
+          </>
+        )}
       </div>
 
       {isExistingSession && (

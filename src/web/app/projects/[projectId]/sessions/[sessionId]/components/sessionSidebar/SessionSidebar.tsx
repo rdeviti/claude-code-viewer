@@ -8,6 +8,7 @@ import {
   PlugIcon,
 } from "lucide-react";
 import { type FC, Suspense, useMemo } from "react";
+import { useConfig } from "@/web/app/hooks/useConfig";
 import { GlobalSidebar, type SidebarTab } from "@/web/components/GlobalSidebar";
 import {
   Tooltip,
@@ -73,10 +74,20 @@ export const SessionSidebar: FC<{
     [activeSessionId, projectId, isSubscriptionMode],
   );
 
+  // Viewer-only mode keeps the archive surfaces: session list only
+  const { config } = useConfig();
+  const visibleTabs = useMemo(
+    () =>
+      config?.viewerOnly === true
+        ? additionalTabs.filter((tab) => tab.id === "sessions")
+        : additionalTabs,
+    [additionalTabs, config?.viewerOnly],
+  );
+
   return (
     <div className={cn("hidden md:flex h-full w-full", className)}>
       <GlobalSidebar
-        additionalTabs={additionalTabs}
+        additionalTabs={visibleTabs}
         defaultActiveTab={initialTab}
         headerButton={
           <TooltipProvider>

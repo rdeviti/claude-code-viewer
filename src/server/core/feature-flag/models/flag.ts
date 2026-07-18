@@ -18,6 +18,10 @@ export type Flag =
   | {
       name: "run-skills-directly";
       enabled: boolean;
+    }
+  | {
+      name: "terminal";
+      enabled: boolean;
     };
 
 export type FlagName = Flag["name"];

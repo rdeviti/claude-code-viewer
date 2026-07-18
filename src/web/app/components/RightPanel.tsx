@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { type FC, type ReactNode, useCallback, useEffect, useRef } from "react";
 import { rightPanelIframeRefAtom, rightPanelResizingAtom } from "@/lib/atoms/rightPanel";
+import { useConfig } from "@/web/app/hooks/useConfig";
 import {
   Tooltip,
   TooltipContent,
@@ -63,7 +64,13 @@ export const RightPanel: FC<RightPanelProps> = ({
   filesToolsTabContent,
   reviewTabContent,
 }) => {
-  const { isOpen, activeTab, width, browserUrl, inputUrl } = useRightPanelState();
+  const { isOpen, activeTab: rawActiveTab, width, browserUrl, inputUrl } = useRightPanelState();
+  const { config } = useConfig();
+  const viewerOnly = config?.viewerOnly === true;
+  // In viewer-only mode the panel is reduced to the Explorer (archive data);
+  // git/review/browser are live-workflow tools
+  const visibleTabs = viewerOnly ? tabs.filter((tab) => tab.id === "explorer") : tabs;
+  const activeTab = viewerOnly && rawActiveTab !== "explorer" ? "explorer" : rawActiveTab;
   const {
     closePanel,
     setActiveTab,
@@ -207,7 +214,7 @@ export const RightPanel: FC<RightPanelProps> = ({
               isMobile ? "gap-1 w-full justify-between" : "gap-0.5",
             )}
           >
-            {tabs.map((tab) => {
+            {visibleTabs.map((tab) => {
               const Icon = tab.icon;
               const isActive = activeTab === tab.id;
               const button = (

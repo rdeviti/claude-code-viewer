@@ -1,5 +1,6 @@
 import { Trans } from "@lingui/react";
 import {
+  EyeIcon,
   GitBranchIcon,
   PanelBottomIcon,
   PanelLeftIcon,
@@ -7,6 +8,7 @@ import {
   SearchIcon,
 } from "lucide-react";
 import { type FC, type ReactNode, useState } from "react";
+import { useConfig } from "@/web/app/hooks/useConfig";
 import { SearchDialog } from "@/web/components/SearchDialog";
 import { Badge } from "@/web/components/ui/badge";
 import {
@@ -15,6 +17,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/web/components/ui/tooltip";
+import { useFeatureFlags } from "@/web/hooks/useFeatureFlags";
 import {
   useBottomPanelActions,
   useBottomPanelState,
@@ -42,6 +45,10 @@ export const AppLayout: FC<AppLayoutProps> = ({
   currentBranch,
   sessionId,
 }) => {
+  const { config, updateConfig } = useConfig();
+  const { isFlagEnabled } = useFeatureFlags();
+  const viewerOnly = config?.viewerOnly === true;
+  const terminalEnabled = isFlagEnabled("terminal");
   const { isLeftPanelOpen } = useLeftPanelState();
   const { setIsLeftPanelOpen } = useLeftPanelActions();
   const { isBottomPanelOpen } = useBottomPanelState();
@@ -94,6 +101,27 @@ export const AppLayout: FC<AppLayoutProps> = ({
               <TooltipTrigger asChild>
                 <button
                   type="button"
+                  onClick={() => updateConfig({ ...config, viewerOnly: !viewerOnly })}
+                  className={cn(
+                    "w-11 h-11 md:w-7 md:h-7 flex items-center justify-center rounded transition-colors",
+                    viewerOnly
+                      ? "bg-blue-500/10 text-blue-600 dark:text-blue-400"
+                      : "hover:bg-muted text-muted-foreground hover:text-foreground",
+                  )}
+                  aria-label="Toggle viewer-only mode"
+                >
+                  <EyeIcon className="w-3.5 h-3.5" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom" className="text-xs">
+                <Trans id="layout.toggle_viewer_only" />
+              </TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
                   onClick={() => {
                     setIsLeftPanelOpen(!isLeftPanelOpen);
                   }}
@@ -113,26 +141,28 @@ export const AppLayout: FC<AppLayoutProps> = ({
               </TooltipContent>
             </Tooltip>
 
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button
-                  type="button"
-                  onClick={() => setIsBottomPanelOpen(!isBottomPanelOpen)}
-                  className={cn(
-                    "w-11 h-11 md:w-7 md:h-7 flex items-center justify-center rounded transition-colors",
-                    isBottomPanelOpen
-                      ? "bg-primary/10 text-primary"
-                      : "hover:bg-muted text-muted-foreground hover:text-foreground",
-                  )}
-                  aria-label="Toggle bottom panel"
-                >
-                  <PanelBottomIcon className="w-3.5 h-3.5" />
-                </button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom" className="text-xs">
-                <Trans id="layout.toggle_bottom_panel" />
-              </TooltipContent>
-            </Tooltip>
+            {terminalEnabled && !viewerOnly && (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    type="button"
+                    onClick={() => setIsBottomPanelOpen(!isBottomPanelOpen)}
+                    className={cn(
+                      "w-11 h-11 md:w-7 md:h-7 flex items-center justify-center rounded transition-colors",
+                      isBottomPanelOpen
+                        ? "bg-primary/10 text-primary"
+                        : "hover:bg-muted text-muted-foreground hover:text-foreground",
+                    )}
+                    aria-label="Toggle bottom panel"
+                  >
+                    <PanelBottomIcon className="w-3.5 h-3.5" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent side="bottom" className="text-xs">
+                  <Trans id="layout.toggle_bottom_panel" />
+                </TooltipContent>
+              </Tooltip>
+            )}
 
             <Tooltip>
               <TooltipTrigger asChild>
